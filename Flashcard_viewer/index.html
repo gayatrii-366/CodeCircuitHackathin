@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#4361ee" />
+  <meta name="description" content="FlashyMind - A fun and interactive flashcard app for better learning" />
+  <title>FlashyMind</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body>  <header>
+    <div class="header-content">
+      <div class="header-left">
+        <h1>🧠 FlashyMind</h1>
+      </div>
+      <div class="header-right">
+        <button id="toggle-mode" class="theme-toggle">🌞</button>
+      </div>
+    </div>
+  </header>
+
+  <main>    <!-- Welcome Screen -->
+    <section id="welcomeScreen" class="welcome-screen">      
+      <div class="welcome-content">
+        <div class="doodle star-1">⭐</div>
+        <div class="doodle star-2">✨</div>
+        <div class="doodle book">📚</div>
+        <div class="doodle pencil">✏️</div>
+        <h2>Welcome to FlashyMind</h2>
+        <p>Select a category to start learning or create new flashcards!</p>
+      </div>
+    </section><!-- Dashboard -->    <section class="dashboard container">
+      <div class="dashboard-header">
+        <div class="dashboard-title">
+          <h2>📚 My Flashcards</h2>
+          <div class="dashboard-stats">
+            <div class="stat-item">
+              <i class="fas fa-layer-group"></i>
+              <span id="totalCards">0</span>
+              <label>Total Cards</label>
+            </div>
+            <div class="stat-item">
+              <i class="fas fa-check-circle"></i>
+              <span id="masteredCards">0</span>
+              <label>Mastered</label>
+            </div>
+            <div class="stat-item">
+              <i class="fas fa-fire"></i>
+              <span id="dayStreak">0</span>
+              <label>Day Streak</label>
+            </div>
+          </div>
+        </div>
+        <div class="dashboard-actions">
+          <button id="openAddCardModal" class="action-btn">
+            <i class="fas fa-plus"></i> Add Card
+          </button>
+          <button id="openCategoryModal" class="action-btn">
+            <i class="fas fa-folder-plus"></i> Add Category
+          </button>
+        </div>
+      </div>
+
+      <div class="dashboard-content">
+        <div class="search-bar">
+          <i class="fas fa-search"></i>
+          <input type="text" id="categorySearch" placeholder="Search categories...">
+        </div>
+        
+        <div class="subjects-grid" id="categoryList">
+          <!-- Categories will be dynamically added here -->
+        </div>
+
+        <div class="recent-activity">
+          <h3>📅 Recent Activity</h3>
+          <div id="activityChart">
+            <!-- Chart will be rendered here -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Study Area -->    <section id="studyArea" class="study-area container" style="display: none;">
+      <div class="study-header">
+        <button id="backToDashboard" class="back-btn">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        <h3 id="currentCategory">Category Name</h3>
+        <button id="shuffleBtn" class="shuffle-btn">
+          <i class="fas fa-random"></i>
+        </button>
+      </div>
+
+      <div class="flashcard-container">
+        <div class="progress-indicator">
+          <span id="cardNumber">Card 1/10</span>
+          <div class="progress-bar-container">
+            <div id="progress" class="progress-bar"></div>
+          </div>
+          <span id="progressText">0% Complete</span>
+        </div>
+
+        <div class="flashcard" id="flashcard">
+          <div class="card-content">
+            <div class="front">
+              <span id="questionText">Question</span>
+            </div>
+            <div class="back">
+              <span id="answerText">Answer</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <button id="knowBtn" class="action-btn know">
+            <i class="fas fa-check"></i> Know
+          </button>
+          <button id="dontKnowBtn" class="action-btn dont-know">
+            <i class="fas fa-times"></i> Don't Know
+          </button>
+        </div>
+      </div>
+    </section>    <!-- Add Card Modal -->
+    <div id="addCardModal" class="modal">
+      <div class="modal-content">
+        <div class="doodle-container">
+          <span class="doodle pencil">✏️</span>
+          <span class="doodle ruler">📏</span>
+          <span class="doodle eraser">🧊</span>
+          <span class="doodle crayon">🖍️</span>
+          <span class="doodle paper">📝</span>
+        </div>
+        <div class="modal-header">
+          <h3>✨ Create New Flashcard</h3>
+          <button class="close-btn">&times;</button>
+        </div>
+        <form id="addCardForm" class="cute-form">
+          <div class="form-group">
+            <select id="category" required>
+              <option value="">📚 Select Category</option>
+              <option value="new">✨ Create New Category</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <input type="text" id="newCategory" placeholder="✏️ Name your new category..." style="display: none;">
+          </div>
+          <div class="form-group">
+            <textarea id="question" placeholder="🤔 What's your question?" required></textarea>
+          </div>
+          <div class="form-group">
+            <textarea id="answer" placeholder="💡 Write the answer..." required></textarea>
+          </div>
+          <div class="form-group">
+            <input type="text" id="tags" placeholder="🏷️ Add tags (comma separated)">
+          </div>
+          <button type="submit" class="submit-btn">
+            <span class="btn-doodle">✨</span>
+            Create Card
+            <span class="btn-doodle">✨</span>
+          </button>
+        </form>
+      </div>
+    </div>    <!-- Category Modal -->
+    <div id="categoryModal" class="modal">
+      <div class="modal-content">
+        <div class="doodle-container">
+          <span class="doodle folder">📁</span>
+          <span class="doodle star">⭐</span>
+          <span class="doodle book">📖</span>
+          <span class="doodle pencil">✏️</span>
+        </div>
+        <div class="modal-header">
+          <h3>✨ Organize Categories</h3>
+          <button class="close-btn">&times;</button>
+        </div>
+        <div class="cute-form">
+          <div class="form-group">
+            <input type="text" id="categoryName" placeholder="🎯 New Category Name" required>
+          </div>
+          <button id="addCategoryBtn" class="submit-btn">
+            <span class="btn-doodle">📁</span>
+            Add Category
+            <span class="btn-doodle">✨</span>
+          </button>
+        </div>
+        <div id="manageCategoriesList" class="category-manage-list"></div>
+      </div>
+    </div>
+
+    <!-- Instructions Page -->
+    <div id="instructionsPage" class="instructions-page" style="display: none;">
+      <div class="instructions-content">
+        <h2>Welcome to FlashyMind! 👋</h2>
+        <div class="instruction-steps">
+          <div class="step">
+            <i class="fas fa-folder-plus"></i>
+            <h3>Create Categories</h3>
+            <p>Organize your flashcards into different subjects or topics</p>
+          </div>
+          <div class="step">
+            <i class="fas fa-plus-circle"></i>
+            <h3>Add Flashcards</h3>
+            <p>Create cards with questions and answers</p>
+          </div>
+          <div class="step">
+            <i class="fas fa-sync-alt"></i>
+            <h3>Practice</h3>
+            <p>Review your cards and track your progress</p>
+          </div>
+          <div class="step">
+            <i class="fas fa-chart-line"></i>
+            <h3>Track Progress</h3>
+            <p>See your improvement over time</p>
+          </div>
+        </div>
+        <button id="startLearning" class="start-btn">Start Learning</button>
+      </div>
+    </div>
+  </main>  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <script src="utils.js" type="module"></script>
+  <script src="script.js" type="module"></script>
+</body>
+</html>
